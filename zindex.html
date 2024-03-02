@@ -154,6 +154,7 @@
     Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjYmZiMzIzNC0yNDBjLTQ0YzAtOGJkZC0yZTgyYjI1YmNhNzUiLCJpZCI6MTA3NzIxLCJpYXQiOjE2NjI5Nzc2MzR9.Q4r9ncZwtBWHP3W19kb0yf4jgd-z1Ck602iXlg9z30M';
 
     //Sandcastle_Begin
+    try{
     const viewer = new Cesium.Viewer("cesiumContainer", {
       geocoder:false,
       homeButton:false,
@@ -168,10 +169,12 @@
       imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
       url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
       }),
-      // terrainProvider: new Cesium.CesiumTerrainProvider({
-          // url: Cesium.IonResource.fromAssetId(3957),
-      // }),
+      terrainProvider: 
+        await Cesium.CesiumTerrainProvider.fromIonAssetId(3957),
     });
+    } catch(error){
+      console.log(error);
+    }
 
 
     // Add locations
