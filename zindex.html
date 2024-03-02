@@ -165,9 +165,12 @@
       timeline:false,
       fullscreenButton:false,
       vrButton:false,
-      terrainProvider: new Cesium.CesiumTerrainProvider({
-        url: Cesium.IonResource.fromAssetId(3957),
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+      url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
       }),
+      //*terrainProvider: new Cesium.CesiumTerrainProvider({
+          url: Cesium.IonResource.fromAssetId(3957),
+      }),*//
     });
 
 
