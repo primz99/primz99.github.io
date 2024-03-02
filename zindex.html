@@ -154,6 +154,11 @@
 
     //Sandcastle_Begin
     const viewer = new Cesium.Viewer("cesiumContainer", {
+      imageryProvider: new Cesium.BingMapsImageryProvider({
+          url: 'https://dev.virtualearth.net',
+          mapStyle: Cesium.BingMapsStyle.ROAD,
+          key: "AreJucNixrQ6n5mzuSzmZxCtMPjhI7MkHQ3yOTBUgpEqLDa2tjsVWsVeGkJ82a5N",
+      })
       geocoder:false,
       homeButton:false,
       sceneModePicker:false,
