@@ -7,12 +7,12 @@
     <meta name="description" content="High resolution terrain of Pennsylvania curated by PASDA and hosted on Cesium ion.">
     <meta name="cesium-sandcastle-labels" content="ion Assets">
     <title>地学实习地点信息平台</title>
-    <script type="text/javascript" src="/js/Sandcastle-header.js"></script>
-    <script src="/js/Cesium.js"></script>
-    <script src="/js/echarts.min.js"></script>
-    <script src="/js/jquery.js"></script>
+    <script type="text/javascript" src="./js/Sandcastle-header.js"></script>
+    <script src="./js/Cesium.js"></script>
+    <script src="./js/echarts.min.js"></script>
+    <script src="./js/jquery.js"></script>
     
-    <script>window.CESIUM_BASE_URL = "/js/CesiumUnminified"</script>
+    <script>window.CESIUM_BASE_URL = "./js/CesiumUnminified"</script>
     <style>
       #container{
         width: 100%;
@@ -26,7 +26,7 @@
         height:10%;    
         margin: 0;
         padding: 0;
-        background-image: url('/img/voice_pic.png');
+        background-image: url('./img/voice_pic.png');
         background-repeat:no-repeat;
         background-position: center;
         background-size: 50%;
@@ -59,7 +59,7 @@
         width: 68%;
         height: 60%;
         z-index: 999;
-        background-image: url('/img/left1.png');
+        background-image: url('./img/left1.png');
         background-repeat:no-repeat;
         background-position:3%;
         background-size: 35%;
@@ -72,7 +72,7 @@
         width: 30%;
         height: 60%;
         z-index: 999;
-        background-image: url('/img/right1.png');
+        background-image: url('./img/right1.png');
         background-repeat:no-repeat;
         background-position:3%;
         background-size: 95%;
@@ -95,7 +95,7 @@
         width: 68%;
         height: 37%;
         z-index: 999;
-        background-image: url('/img/left2.png');
+        background-image: url('./img/left2.png');
         background-repeat:no-repeat;
         background-position:3%;
         background-size: 30%;
@@ -109,7 +109,7 @@
         width: 30%;
         height: 35%;
         z-index: 999;
-        background-image: url('/img/right3.png');
+        background-image: url('./img/right3.png');
         background-repeat:no-repeat;
         background-position:3%;
         background-size: 85%;
@@ -119,7 +119,7 @@
 
   <body class="sandcastle-loading" data-sandcastle-bucket="bucket-requirejs.html">
     <style>
-      @import url(/css/bucket.css);
+      @import url(./css/bucket.css);
     </style>
     <div id="container">
       <div id="head">
@@ -417,7 +417,7 @@
     }
     </script>
 
-    <script src="/js/index.js">
+    <script src="./js/index.js">
       //这个是其他统计图表
     </script>
 
@@ -428,7 +428,7 @@
       var option;
 
       myChart.showLoading();
-      $.get('/js/piece_diss1.json', function (geoJson) {
+      $.get('./js/piece_diss1.json', function (geoJson) {
         myChart.hideLoading();
         echarts.registerMap('guanzhong', geoJson);
         myChart.setOption(
