@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+    <meta name="description" content="High resolution terrain of Pennsylvania curated by PASDA and hosted on Cesium ion.">
+    <meta name="cesium-sandcastle-labels" content="ion Assets">
+    <title>地学实习地点信息平台</title>
+    <script type="text/javascript" src="js/Sandcastle-header.js"></script>
+    <script src="js/Cesium.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <script src="js/jquery.js"></script>
+    
+    <script>window.CESIUM_BASE_URL = "js/CesiumUnminified"</script>
+    <style>
+      #container{
+        width: 100%;
+        height:100%;
+        margin: 0;
+        padding: 0;
+      }
+      #head{
+        position: absolute;
+        width: 100%;
+        height:10%;    
+        margin: 0;
+        padding: 0;
+        background-image: url('img/voice_pic.png');
+        background-repeat:no-repeat;
+        background-position: center;
+        background-size: 50%;
+        z-index: 999;
+      }
+      h1{
+        color: aqua;
+        text-align: center;
+        font-size: 35px;
+      }
+      p{
+        color: rgb(0, 96, 134);
+        text-indent: 30px;
+        font-size: 15px;
+        left:20px;
+      }
+      #cesiumContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+        /*data info*/
+      #Box1{
+        position: absolute;
+        top: 9%;
+        left:1%;
+        width: 68%;
+        height: 60%;
+        z-index: 999;
+        background-image: url('img/left1.png');
+        background-repeat:no-repeat;
+        background-position:3%;
+        background-size: 35%;
+      }
+      /*气温降水 折线+柱状*/
+      #rightBox1{
+        position: absolute;
+        top: 9%;
+        left: 69%;
+        width: 30%;
+        height: 60%;
+        z-index: 999;
+        background-image: url('img/right1.png');
+        background-repeat:no-repeat;
+        background-position:3%;
+        background-size: 95%;
+      }
+      .chart{
+        position: absolute;
+        background-color: rgba(53, 231, 255, 0.541);
+        opacity: 0.9;
+        top:20%;
+        left: 10%;
+        width:80%;
+        height:55%;
+        z-index: 999;
+      }
+      /*实习点在关中or陕西小地图*/
+      #Box2{
+        position: absolute;
+        top: 65%;
+        left:3%;
+        width: 68%;
+        height: 37%;
+        z-index: 999;
+        background-image: url('img/left2.png');
+        background-repeat:no-repeat;
+        background-position:3%;
+        background-size: 30%;
+
+      }
+      /*土壤化学组成*/
+      #rightBox2{
+        position: absolute;
+        top: 64%;
+        left: 70%;
+        width: 30%;
+        height: 35%;
+        z-index: 999;
+        background-image: url('img/right3.png');
+        background-repeat:no-repeat;
+        background-position:3%;
+        background-size: 85%;
+      }
+    </style>
+  </head>
+
+  <body class="sandcastle-loading" data-sandcastle-bucket="bucket-requirejs.html">
+    <style>
+      @import url(css/bucket.css);
+    </style>
+    <div id="container">
+      <div id="head">
+        <h1 class="title">地学实习地点示意</h1>
+      </div>
+      
+      <div id="cesiumContainer" class="fullSize">
+        
+        <div id="Box1">
+          <div class="chart" style="height: 80%;width: 31%;left: 4%;top: 11%;"></div>
+        </div>
+        
+        <div id="toolbar" style="z-index: 99999;position: absolute;left: 87%;top: 12%;"></div>
+
+        <div id="rightBox1">
+          <div class="chart"></div>
+        </div>
+
+        <div id="Box2">
+          <div class="chart" style="height: 62%;width: 27%;left: 3.5%;top: 21%;"></div>
+        </div>
+
+        <div id="rightBox2">
+          <div class="chart" style="height: 66%;width: 79%;left: 3.5%;top: 22%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <script id="cesium_sandcastle_script">
+    window.startup = function (Cesium) {'use strict';
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjYmZiMzIzNC0yNDBjLTQ0YzAtOGJkZC0yZTgyYjI1YmNhNzUiLCJpZCI6MTA3NzIxLCJpYXQiOjE2NjI5Nzc2MzR9.Q4r9ncZwtBWHP3W19kb0yf4jgd-z1Ck602iXlg9z30M';
+
+    //Sandcastle_Begin
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+      geocoder:false,
+      homeButton:false,
+      sceneModePicker:false,
+      baseLayerPicker:false,
+      navigationHelpButton:false,
+      animation:false,
+      //creditContainer:"credit",
+      timeline:false,
+      fullscreenButton:false,
+      vrButton:false,
+      terrainProvider: new Cesium.CesiumTerrainProvider({
+        url: Cesium.IonResource.fromAssetId(3957),
+      }),
+    });
+
+    // Add locations
+    Sandcastle.addDefaultToolbarMenu([
+        //*************index：0******************//
+        {
+          text: "西农南校",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.0636381,
+                34.26955238,
+                616.6770689945084
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(200),
+                pitch: Cesium.Math.toRadians(-5),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：1******************//
+        {
+          text: "黑河大桥",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.2130017,
+                34.07382157,
+                801.05748252867375
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(165),
+                pitch: Cesium.Math.toRadians(-10),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：2******************//
+        {
+          text: "朱家嘴村",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.2909126,
+                33.30692774,
+                876.34
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(180),
+                pitch: Cesium.Math.toRadians(-15),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：4******************//
+        {
+          text: "火地塘林场",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.4437162,
+                33.43387941,
+                1706.268309953562
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(90),
+                pitch: Cesium.Math.toRadians(-10),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：5******************//
+        {
+          text: "平河梁草甸",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.4361131,
+                33.47025741,
+                2370.879
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(60),
+                pitch: Cesium.Math.toRadians(-5),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：6******************//
+        {
+          text: "两河镇",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.0826144,
+                33.27050177,
+                670.879
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(200),
+                pitch: Cesium.Math.toRadians(-5),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：7******************//
+        {
+          text: "平梁砖瓦厂",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.434621,
+                32.91301561,
+                570.879
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(200),
+                pitch: Cesium.Math.toRadians(-5),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：8******************//
+        {
+          text: "汉阴水稻田",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.5836282,
+                32.83913214,
+                440.879
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(200),
+                pitch: Cesium.Math.toRadians(-5),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：9******************//
+        {
+          text: "柞水溶洞",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                109.1615838,
+                33.56714099,
+                1000.056
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(30),
+                pitch: Cesium.Math.toRadians(-5),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：10******************//
+        {
+          text: "仙游寺",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.194292,
+                34.056642,
+                750.492
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(70),
+                pitch: Cesium.Math.toRadians(-10),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：11******************//
+        {
+          text: "口镇大断裂",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.6918772,
+                34.70689555,
+                700.729
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(5),
+                pitch: Cesium.Math.toRadians(-20),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：12******************//
+        {
+          text: "太极湾",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                108.1903922,
+                34.98049661,
+                2500.894
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(-60),
+                pitch: Cesium.Math.toRadians(-35),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+        //*************index：13******************//
+        {
+          text: "王东沟",
+          onselect: function () {
+            viewer.scene.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(
+                107.6879216,
+                35.22062826,
+                1970.91
+              ),
+              orientation: {
+                heading: Cesium.Math.toRadians(90),
+                pitch: Cesium.Math.toRadians(-15),
+                roll: 0.0,
+              },
+            });
+          },
+        },
+      ],
+      "toolbar"
+    );
+    //Sandcastle_End
+    Sandcastle.finishedLoading();
+    };
+    if (typeof Cesium !== 'undefined') {
+      window.startupCalled = true;
+      window.startup(Cesium);
+    }
+    </script>
+
+    <script src="js/index.js">
+      //这个是其他统计图表
+    </script>
+
+    <script>
+      //这个是自定义Geojson
+      var chartDom = document.querySelector('#rightBox1 .chart');
+      var myChart = echarts.init(chartDom);
+      var option;
+
+      myChart.showLoading();
+      $.get('js/piece_diss1.json', function (geoJson) {
+        myChart.hideLoading();
+        echarts.registerMap('guanzhong', geoJson);
+        myChart.setOption(
+          (option = {
+            title: {
+              text: '实习地点位置及平均海拔',
+              left:'center',
+              textStyle:{
+                fontWeight:'bold',
+                fontSize:15,
+                color:'rgb(0,255,255)'
+              }
+            },
+            tooltip: {
+              trigger: 'item',
+              formatter: '{b}<br/>海拔：{c} (m)'
+            },
+            toolbox: {
+              show: false
+            },
+            visualMap: {
+              min: 0,
+              max: 1500,
+              text: ['High', 'Low'],
+              realtime: false,
+              calculable: true,
+              inRange: {
+                color: ['lightskyblue', 'yellow', 'orangered']
+              },
+              itemWidth:15,
+              itemHeight:120,
+              top:'15%',
+              left:'3%'
+            },
+            series: [
+              {
+                name: '实习地点位置及平均海拔',
+                type: 'map',
+                map: 'guanzhong',
+                label: {
+                  show: false
+                },
+                left:'40%',
+                zoom:'1.15',
+                data: [
+                { name: '灞桥区', value: 0 },
+                { name: '白河县', value: 0 },
+                { name: '碑林区', value: 0 },
+                { name: '彬县', value: 1108 },
+                { name: '淳化县', value: 0 },
+                { name: '丹凤县', value: 0 },
+                { name: '高陵县', value: 0 },
+                { name: '汉滨区', value: 0 },
+                { name: '汉阴县', value: 753 },
+                { name: '户县', value: 0 },
+                { name: '泾阳县', value: 694 },
+                { name: '岚皋县', value: 0 },
+                { name: '蓝田县', value: 0 },
+                { name: '礼泉县', value: 0 },
+                { name: '莲湖区', value: 0 },
+                { name: '临潼区', value: 0 },
+                { name: '洛南县', value: 0 },
+                { name: '宁陕县', value: 1422 },
+                { name: '平利县', value: 0 },
+                { name: '乾县', value: 0 },
+                { name: '秦都区', value: 0 },
+                { name: '三原县', value: 0 },
+                { name: '山阳县', value: 0 },
+                { name: '商南县', value: 0 },
+                { name: '商州区', value: 0 },
+                { name: '石泉县', value: 870 },
+                { name: '未央区', value: 0 },
+                { name: '渭城区', value: 0 },
+                { name: '武功县', value: 0 },
+                { name: '新城区', value: 0 },
+                { name: '兴平市', value: 0 },
+                { name: '旬阳县', value: 0 },
+                { name: '旬邑县', value: 0 },
+                { name: '阎良区', value: 0 },
+                { name: '雁塔区', value: 0 },
+                { name: '杨陵区', value: 488 },
+                { name: '永寿县', value: 1001 },
+                { name: '柞水县', value: 1098 },
+                { name: '长安区', value: 0 },
+                { name: '长武县', value: 1089 },
+                { name: '镇安县', value: 0 },
+                { name: '镇坪县', value: 0 },
+                { name: '周至县', value: 1274 },
+                { name: '紫阳县', value: 0 }
+                ]
+              }
+            ]
+          })
+        );
+      });
+
+      option && myChart.setOption(option);
+    </script>
+
+    <script>
+      //这个是文本
+      var boxDiv= document.querySelector("#Box1 .chart");
+      boxDiv.innerHTML='<p>'+"本次自然地理学综合实习，自西北农林科技大学南校区出发，分为南线和北线，总计时长六天，其中南线耗时四天，北线耗时两天。本次实习共途经陕西省三大重要地形区：关中平原、南部丘陵与北部黄土高原，共爬升海拔2000余米。"+'</p>'+'<p>'+"南线安排路线如下：西农南校去出发，第一天至黑河大桥、朱家嘴村、十八丈瀑布、抵达火地塘林场住宿；第二天攀登平河梁；第三天参观秦岭南部的平梁砖瓦厂、汉阴县水稻田；第四天游览柞水溶洞。北线则路线方向相反：首先到达口镇-关山大断裂；继而继续北上隔河远望太极弯；随后抵达王东村观王东沟；参观我校气象实验站后返程。"+'</p>';
+    </script>
+
+  </body>
+</html>
