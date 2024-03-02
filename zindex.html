@@ -12,7 +12,7 @@
     <script src="./js/echarts.min.js"></script>
     <script src="./js/jquery.js"></script>
     
-    <script>window.CESIUM_BASE_URL = "js/CesiumUnminified"</script>
+    <script>window.CESIUM_BASE_URL = "./js/CesiumUnminified"</script>
 
     <style>
       #container{
@@ -170,7 +170,9 @@
       url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
       }),
       terrainProvider: 
-        await Cesium.CesiumTerrainProvider.fromIonAssetId(3957),
+        new Cesium.CesiumTerrainProvider({
+          url: Cesium.IonResource.fromAssetId(3957),
+      }), 
     });
     } catch(error){
       console.log(error);
